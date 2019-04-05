@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+<meta http-equiv="dcterms.rightsHolder" content="Guille Arriaza"/>
+<meta http-equiv="dcterms.rights" content="This is free and unencumbered software released into the public domain. Anyone is free to copy, modify, publish, use, compile, sell, or distribute this software, either in source code form or as a compiled binary, for any purpose, commercial or non-commercial, and by any means. In jurisdictions that recognize copyright laws, the author or authors of this software dedicate any and all copyright interest in the software to the public domain. We make this dedication for the benefit of the public at large and to the detriment of our heirs and successors. We intend this dedication to be an overt act of relinquishment in perpetuity of all present and future rights to this software under copyright law. THE SOFTWARE IS PROVIDED [[[AS IS]]], WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. For more information, please refer to <http://unlicense.org/>"/>
+<meta http-equiv="version" content="0.3-1904051657"/>
+<title>Chronometer</title>
+<style type="text/css">
+body {
+position: relative;
+padding: 0px;
+margin: 0px;
+border: 0px;
+background-color: #FFFFFF;
+color: #000000;
+font-family: Helvetica, Myriad, Arial, Sans-serif
+}
+.counter {
+position: relative;
+padding: 3px;
+margin: 3px;
+border: 0px;
+width: 200px;
+height: 60px;
+display: inline-block;
+border-radius: 5px;
+float: left;
+font-size: 10px;
+background-color: #DDDDDD;
+}
+.markersWrapper {
+position: absolute;
+top: 40px;
+left: 3px;
+z-index: 1000;
+color: #FFFFFF;
+height: 15px;
+width: 50px;
+font-size: 10px;
+overflow: hidden;
+}
+.markersWrapper:hover {
+overflow: visible;
+}
+.markers {
+background-color: #333333;
+display: inline-block;
+}
+.chrono {
+position: absolute;
+top: 3px;
+left: 3px;
+}
+input {
+background-color: #FFFFFF;
+color: #000000;
+padding: 3px;
+border: 0px;
+font-size: 10px;
+}
+.tolabel {
+position: absolute;
+top: 20px;
+left: 3px;
+width: 175px;
+}
+.waittime {
+position: absolute;
+top: 1px;
+right: 25px;
+width: 30px;
+}
+button {
+background-color: #000000;
+color: #FFFFFF;
+border: 0px;
+margin: 3px;
+border-radius: 5px;
+font-style: bold;
+font-weight: bold;
+}
+#addcounter {
+position: fixed;
+top: 0px;
+right: 0px
+}
+.markbutton {
+position: absolute;
+top: 40px;
+right: 3px;
+}
+.lastmark {
+position: absolute;
+top: 40px;
+left: 100px;
+}
+.xCounter {
+position: absolute;
+top: -6px;
+right: -6px;
+background-color: #600;
+}
+</style>
+</head>
+<body>
+<div id="counters">
+</div>
+<button id="addcounter" onClick="addCounter()">+</button>
+<script type="text/javascript">
+c = 0;
+c2 = 0;
+redchronosexist = 0;
+changedred = 0;
+active_chrono = [];
+last_marks = [];
+whitefavicon = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkBAMAAACCzIhnAAAAJ1BMVEUAAAABAQEWFhYwMDBISEhWVlZxcXGHh4eXl5ewsLDHx8fX19f+/v6VzBmJAAAAAXRSTlMAQObYZgAAAAFiS0dEAIgFHUgAAAAJcEhZcwAACxMAAAsTAQCanBgAAAAHdElNRQfjAxoTBTP4x4bdAAAAHWlUWHRDb21tZW50AAAAAABDcmVhdGVkIHdpdGggR0lNUGQuZQcAAAQ4SURBVFjDvZjPbxNHFMfZ/AV+dpw0qIdOoUXQXjathPhxcQmQgC+hhxInF4cmEigXCoqplAuFQlRySaukWPhSiNok+FSCVNm+lPxonJ0/ije76915Mzu7nkMZKc7aO5993/djZ+ftsWP/13DAnoCcNWGLgDUijADYE2Aryw4JiZw1YYGANQK2iAOWCJCRszLQR4y16ekImIbN5VNdAfgQiKQsf+LyiVHWX8DEtPzXtzucV7i3follI2LKoAAEwhEqZSGCGHrNeQ/hvFVNd2UAT57qcBnh3t1URPixwCnCvVIKgvEqNCoqwuddM+Lb+FlFuuUDZnIfT5zmfK8RTr0W/t9v8F/xYgbfC+j60cVwai8Ma+gOSvsk2RN/9jynYwr/dpO9wRz6U3Y7hDicEZ+lJG/QSDlwd4kgb/wr7CWZYb4nshM4mpz/EyTHTQgAwBdcHfvD0eHfujLU1dCQl0PRYVdXxmBII/jD4/FxVVMWRpgOV/ptV1XmQL6pEUcgBe+IKcqcKF7SOJAvgzHLKbpOnqPz//us8++g9P23bxRlADM716jrMPMwjjFfu75PESzJpgcVGalC2T0TfftzCj0jpelgfXksviN9ZIKVo5xO+HWWI8gIqhcfEnIZVqLaFB+rBGHwJf72lp2XkdE8Dcg7kkwAX9MGq0gIFJWYE/8BgqyswR0JOU4RT0YGoKdhIz8dI2oJMSlkTqzhFSxEyJKCTEr+O/BR9PtPYZyqPbFydmVEkj1beBEgRbXm/iDIGcnLHwZXfGREu+MkhMEFOTJ3Cw2BXFCRN1JiKMK9aqGJyPV0pEwzUCp2EpA9gszQk93S8KSO7EsIwLRy9hCXRw15K6Uf78mxsbFxYsellh/jBPm+ZPoV+Z6+fuwQX3QkYeyYg2wacpCd/pCXpoIxj1WCjPRBeLSSh/sg2lWCFLORdkteleIbOc3ItnwjY/qb2UY2lRVmIYtob28QhMHHWbJaW6tk6cuMcru1Xa8qa3JBnNg0ET+2t7fq9DE24D+PDyZMyOPKVn1deSaLrUX3rFnW7O3nj7Sn2GnvUsecks2vHlQVBJ9Jt1bSfF876WpPZHXFIEbqz5fvaduLxK1ClJL68tNZbRPDjJXZFkae1lwNQWUrJllopHY/YUMGhgIIZNUmE7Z9LNrFkFi311voe20uad+LyoI143CJyHr1C8pavJG4H4Wgzvg7Kuuvc+j7fPLm2gm3ijcV368s1+ZvGLbw4HvT7eXnRZiSW7XFOVMDg2ZO4VrcjDfwfkoefZfSJ4B4QCzGbUKQkiefz6a2lfln0zEiyhF9H81oeeJ1YyooRz8l5lZMNFbFni8TQd7n3PQ2XPSVg89CRMha/t7Natz9tvKqXzLjaORJ0FimN+7+lPzN19wbb/3+LevrdQrrdbyfsr5fwDCr1wlx3KzfpQww+1c8Ql/edOY9WjN5KNQJkcsAAAAASUVORK5CYII=";
+redfavicon = " data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkBAMAAACCzIhnAAAAGFBMVEUAAQAuAQBjAACWAACtAAFZVQCjnwD+/wGUfd4cAAAAAWJLR0QAiAUdSAAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB+MEBRYyO9qK9+kAAAAdaVRYdENvbW1lbnQAAAAAAENyZWF0ZWQgd2l0aCBHSU1QZC5lBwAAA+tJREFUWMOVWEt2qzAMFbQhUz5ZgCEsoAlZQAEvgMlrp5mknWbSdPvPf8sf3KBJcsDX15J1bQkAZvtfZvct/4D/+03+u3nP/p76BltJfmAzybKZ5LqZRC1rA8lj2UqiEcXTJBohIZZvncQgxEP5DJIkFiEg8i2kSHZg7dO8hRQJuBD1FlLpiu3bvIWQ5Ov2D0Kz4yA5tbWdHQep9SMr7Dh4jgT2dhw8RwKfq3m2M3tXZQ7kuprMcruz7kJpQ+eu9KMWkhSLBnAI9UBREo7IB0o1hNKBpEl4TuUXiiF0JkkSbj11IXQuEyTcj77xIVT5s0bS0zZgOUwpkpzS0fOFjj0lCRI2fH5VQ1XgOO0s9RJon9mBD6mpa5xtlMeFr33muxjyfnEQk5in5Brztc9Mrn7qHcibmOHEnfG1v0CmprcsM/t71puz87VfALxQ38bcktlk1pq+o3234yxksimgtb9AHiAoQcQEPO0/VIRdK9Gz0df+j9hGz2a81tnX/tXEC3uPpxEJjfOMhdjzZcou73gaUrp5xl05Na7rcCBollMzigQwJNyVGRoPUtqAnWruzCdK5jvLr9ndGQKNDeJYizzbI8Vc+dafna0hUNkpJpkABVLMAq8i9xoMKcENyDtLs190o/XUwxAtBpwzluShNxJhSJCnzNlvQ8ICpiNjMAzy6m2tPBq1kDOb5L2B+KmND7Q7ihVRI0mYdSqZlfadLD/KnyyQj6N9BJlJ1gtIHoUY7ePgSAwJhf3maN9Jr7lkKUzcZ+qYQdp3X3PMCsRq31PxVOZlCBkd7fuvpxKiLFb7kFVV5RzGZ4+5ZQP48WeP4yYtfM2ShkRMQu7qPN4AkVlzjZzHEcOyfA4yC4hSzHMQVjUU6IDJnyBhkL3R/j1M9AjJUKqqDBwhpxCDrsr2+LhILWs4q4tMH+aHv0lO4Gg/OE1CEl1mmXs//5PkrCDm3hchO68hOobodFVm7v2LuBFWrG2GrgPv3mf+T/n6skjXmStZ3/vwMleXRIAzVchZ7TNn2j4Rra7N/Hv/J6EyHi29LnTvP9Z3RpAoiFPzL6uZKUm6sL6Mlj0I0YZF7APiMlPLkvHyitjFZLMT66FdIxHgSKE4D2/HNZK7ShpdTNpNzBMkypva871KkQia6WBLa7nvKZKggBcBbut1kkJEoLNVuNqSvFz/qMAPg6NtRpwtwYvBvbHb8sxo33EPDf73lkx3FLUkaf0Wyev3+dKyo4GcDQI36pF+H2oetKHmJGEfFuv3BWjgkK4Km71ovw/RZv830e8XS6QNdz45QPjl4oZAu8h3DYh8uXhcNeDjGvmuAaufRz6+vuMfT/4DHXXmNA4ydaEAAAAASUVORK5CYII=";
+favicon = document.querySelector("link[rel*='icon']") || document.createElement('link');
+favicon.type = 'image/x-icon';
+favicon.rel = 'shortcut icon';
+favicon.href = whitefavicon;
+document.getElementsByTagName('head')[0].appendChild(favicon);
+
+
+
+function showNotification(label){
+var notification = new Notification(
+'Alert From Chronometer!', {
+body: label,
+icon: redfavicon,
+});
+} //function showNotification
+
+function obtainDate(counter){
+d = new Date();
+last_marks[counter] = d;
+d = d.toLocaleTimeString().substr(0,8);
+document.getElementById("markers_" + counter).innerHTML += "<br />" + d;
+document.getElementById("lastmark_" + counter).innerHTML = d;
+} //function obtainDate
+
+
+function addCounter(){
+titles = [];
+waittimes = [];
+active_chrono.forEach(function(item,index) {
+if (active_chrono[index] !== 0) {
+titles[index] = document.getElementById("tolabel_" + index).value;
+waittimes[index] = document.getElementById("waittime_" + index).value;
+}});
+c++;
+d = new Date();
+last_marks[c] = d;
+active_chrono[c] = c;
+d = d.toLocaleTimeString().substr(0,8);
+document.getElementById("counters").innerHTML += "<div class=\"counter\" id=\"counter_" + c + "\"><button class=\"xCounter\" onClick=\"closeCouter(" + c + ")\">x</button><input class=\"waittime\" id=\"waittime_" + c + "\" type=\"number\" value=\"10\" min=\"1\" max=\"60\" step=\"1\"/><input class=\"tolabel\" id=\"tolabel_" + c + "\" type=\"text\" value=\"\" /><div class=\"markersWrapper\"><div class=\"markers\" id=\"markers_" + c + "\">" + d + "</div></div><div class=\"lastmark\" id=\"lastmark_" + c + "\">" + d + "</div><div class=\"chrono\" id=\"chrono_" + c + "\">00:00:00</div><button class=\"markbutton\" onClick=\"obtainDate(" + c + ")\">↻</button></div>";
+titles.forEach(function(item,index) {
+document.getElementById("tolabel_" + index).value = item;
+});
+waittimes.forEach(function(item,index) {
+document.getElementById("waittime_" + index).value = item;
+});
+document.getElementById("counter_" + c).style.backgroundColor = "rgb(221, 221, 221)";
+} //function addCounter
+
+
+function closeCouter(counter) {
+toDel = document.getElementById("counter_" + counter);
+toDel.parentNode.removeChild(toDel);
+active_chrono[counter] = 0;
+} //function closeCounter
+
+
+function updateChrono() {
+redchronosexist = 0;
+changedred = [];
+active_chrono.forEach(updateIndividualChrono);
+if (redchronosexist == 1) {
+favicon.href = redfavicon;
+document.getElementsByTagName('head')[0].appendChild(favicon);
+if (changedred !== []) {
+changedred.forEach(function(item,index) {
+showNotification(document.getElementById("tolabel_" + item).value);
+});
+}
+}
+else {
+favicon.href = whitefavicon;
+document.getElementsByTagName('head')[0].appendChild(favicon);
+}
+} //function updateChrono
+
+
+function updateIndividualChrono(item,index) {
+if (active_chrono[index] !== 0) {
+d = new Date(null)
+nd = new Date();
+timediff = Math.abs(nd-last_marks[index]);
+d.setMilliseconds(timediff);
+d = d.toISOString().substr(11,8);
+document.getElementById("chrono_" + active_chrono[index]).innerHTML = d;
+if (new Date("1/1/2001 " + d) > new Date("1/1/2001 00:" + document.getElementById("waittime_" + index).value + ":00")) {
+redchronosexist = 1;
+if (document.getElementById("counter_" + index).style.backgroundColor == "rgb(221, 221, 221)") {
+document.getElementById("counter_" + index).style.backgroundColor = "rgb(255, 102, 102)";
+changedred.push(index);
+}
+}
+else {
+if (document.getElementById("counter_" + index).style.backgroundColor == "rgb(255, 102, 102)") {
+document.getElementById("counter_" + index).style.backgroundColor = "rgb(221, 221, 221)";
+}
+}
+}
+} //function updateIndividualChrono
+
+
+var interval = setInterval(function() {
+updateChrono();
+},1000);
+</script>
+</body>
+</html>
