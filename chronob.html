@@ -112,6 +112,7 @@ c = 0;
 c2 = 0;
 redchronosexist = 0;
 changedred = 0;
+ntf = 0;
 active_chrono = [];
 last_marks = [];
 whitefavicon = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkBAMAAACCzIhnAAAAJ1BMVEUAAAABAQEWFhYwMDBISEhWVlZxcXGHh4eXl5ewsLDHx8fX19f+/v6VzBmJAAAAAXRSTlMAQObYZgAAAAFiS0dEAIgFHUgAAAAJcEhZcwAACxMAAAsTAQCanBgAAAAHdElNRQfjAxoTBTP4x4bdAAAAHWlUWHRDb21tZW50AAAAAABDcmVhdGVkIHdpdGggR0lNUGQuZQcAAAQ4SURBVFjDvZjPbxNHFMfZ/AV+dpw0qIdOoUXQXjathPhxcQmQgC+hhxInF4cmEigXCoqplAuFQlRySaukWPhSiNok+FSCVNm+lPxonJ0/ije76915Mzu7nkMZKc7aO5993/djZ+ftsWP/13DAnoCcNWGLgDUijADYE2Aryw4JiZw1YYGANQK2iAOWCJCRszLQR4y16ekImIbN5VNdAfgQiKQsf+LyiVHWX8DEtPzXtzucV7i3follI2LKoAAEwhEqZSGCGHrNeQ/hvFVNd2UAT57qcBnh3t1URPixwCnCvVIKgvEqNCoqwuddM+Lb+FlFuuUDZnIfT5zmfK8RTr0W/t9v8F/xYgbfC+j60cVwai8Ma+gOSvsk2RN/9jynYwr/dpO9wRz6U3Y7hDicEZ+lJG/QSDlwd4kgb/wr7CWZYb4nshM4mpz/EyTHTQgAwBdcHfvD0eHfujLU1dCQl0PRYVdXxmBII/jD4/FxVVMWRpgOV/ptV1XmQL6pEUcgBe+IKcqcKF7SOJAvgzHLKbpOnqPz//us8++g9P23bxRlADM716jrMPMwjjFfu75PESzJpgcVGalC2T0TfftzCj0jpelgfXksviN9ZIKVo5xO+HWWI8gIqhcfEnIZVqLaFB+rBGHwJf72lp2XkdE8Dcg7kkwAX9MGq0gIFJWYE/8BgqyswR0JOU4RT0YGoKdhIz8dI2oJMSlkTqzhFSxEyJKCTEr+O/BR9PtPYZyqPbFydmVEkj1beBEgRbXm/iDIGcnLHwZXfGREu+MkhMEFOTJ3Cw2BXFCRN1JiKMK9aqGJyPV0pEwzUCp2EpA9gszQk93S8KSO7EsIwLRy9hCXRw15K6Uf78mxsbFxYsellh/jBPm+ZPoV+Z6+fuwQX3QkYeyYg2wacpCd/pCXpoIxj1WCjPRBeLSSh/sg2lWCFLORdkteleIbOc3ItnwjY/qb2UY2lRVmIYtob28QhMHHWbJaW6tk6cuMcru1Xa8qa3JBnNg0ET+2t7fq9DE24D+PDyZMyOPKVn1deSaLrUX3rFnW7O3nj7Sn2GnvUsecks2vHlQVBJ9Jt1bSfF876WpPZHXFIEbqz5fvaduLxK1ClJL68tNZbRPDjJXZFkae1lwNQWUrJllopHY/YUMGhgIIZNUmE7Z9LNrFkFi311voe20uad+LyoI143CJyHr1C8pavJG4H4Wgzvg7Kuuvc+j7fPLm2gm3ijcV368s1+ZvGLbw4HvT7eXnRZiSW7XFOVMDg2ZO4VrcjDfwfkoefZfSJ4B4QCzGbUKQkiefz6a2lfln0zEiyhF9H81oeeJ1YyooRz8l5lZMNFbFni8TQd7n3PQ2XPSVg89CRMha/t7Natz9tvKqXzLjaORJ0FimN+7+lPzN19wbb/3+LevrdQrrdbyfsr5fwDCr1wlx3KzfpQww+1c8Ql/edOY9WjN5KNQJkcsAAAAASUVORK5CYII=";
@@ -121,7 +122,11 @@ favicon.type = 'image/x-icon';
 favicon.rel = 'shortcut icon';
 favicon.href = whitefavicon;
 document.getElementsByTagName('head')[0].appendChild(favicon);
-
+if (window.Notification && Notification.permission !== "denied") {
+Notification.requestPermission(function(status) {
+ntf = 1;
+});
+}
 
 
 function showNotification(label){
@@ -181,7 +186,7 @@ favicon.href = redfavicon;
 document.getElementsByTagName('head')[0].appendChild(favicon);
 if (changedred !== []) {
 changedred.forEach(function(item,index) {
-showNotification(document.getElementById("tolabel_" + item).value);
+if (ntf == 1) {showNotification(document.getElementById("tolabel_" + item).value);}
 });
 }
 }
@@ -200,7 +205,8 @@ timediff = Math.abs(nd-last_marks[index]);
 d.setMilliseconds(timediff);
 d = d.toISOString().substr(11,8);
 document.getElementById("chrono_" + active_chrono[index]).innerHTML = d;
-if (new Date("1/1/2001 " + d) > new Date("1/1/2001 00:" + document.getElementById("waittime_" + index).value + ":00")) {
+//if (new Date("1/1/2001 " + d) > new Date("1/1/2001 00:" + document.getElementById("waittime_" + index).value + ":00")) {
+if (new Date("1/1/2001 " + d) > new Date("1/1/2001 00:00:" + document.getElementById("waittime_" + index).value)) {
 redchronosexist = 1;
 if (document.getElementById("counter_" + index).style.backgroundColor == "rgb(221, 221, 221)") {
 document.getElementById("counter_" + index).style.backgroundColor = "rgb(255, 102, 102)";
