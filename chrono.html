@@ -4,7 +4,7 @@
 <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
 <meta http-equiv="dcterms.rightsHolder" content="Guille Arriaza"/>
 <meta http-equiv="dcterms.rights" content="This is free and unencumbered software released into the public domain. Anyone is free to copy, modify, publish, use, compile, sell, or distribute this software, either in source code form or as a compiled binary, for any purpose, commercial or non-commercial, and by any means. In jurisdictions that recognize copyright laws, the author or authors of this software dedicate any and all copyright interest in the software to the public domain. We make this dedication for the benefit of the public at large and to the detriment of our heirs and successors. We intend this dedication to be an overt act of relinquishment in perpetuity of all present and future rights to this software under copyright law. THE SOFTWARE IS PROVIDED [[[AS IS]]], WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. For more information, please refer to <http://unlicense.org/>"/>
-<meta http-equiv="version" content="0.2-1904021837"/>
+<meta http-equiv="version" content="0.5-1904872004"/>
 <title>Chronometer</title>
 <style type="text/css">
 body {
@@ -110,17 +110,33 @@ background-color: #600;
 <script type="text/javascript">
 c = 0;
 c2 = 0;
-redchronos = 0;
+redchronosexist = 0;
+changedred = 0;
+ntf = 0;
 active_chrono = [];
 last_marks = [];
 whitefavicon = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkBAMAAACCzIhnAAAAJ1BMVEUAAAABAQEWFhYwMDBISEhWVlZxcXGHh4eXl5ewsLDHx8fX19f+/v6VzBmJAAAAAXRSTlMAQObYZgAAAAFiS0dEAIgFHUgAAAAJcEhZcwAACxMAAAsTAQCanBgAAAAHdElNRQfjAxoTBTP4x4bdAAAAHWlUWHRDb21tZW50AAAAAABDcmVhdGVkIHdpdGggR0lNUGQuZQcAAAQ4SURBVFjDvZjPbxNHFMfZ/AV+dpw0qIdOoUXQXjathPhxcQmQgC+hhxInF4cmEigXCoqplAuFQlRySaukWPhSiNok+FSCVNm+lPxonJ0/ije76915Mzu7nkMZKc7aO5993/djZ+ftsWP/13DAnoCcNWGLgDUijADYE2Aryw4JiZw1YYGANQK2iAOWCJCRszLQR4y16ekImIbN5VNdAfgQiKQsf+LyiVHWX8DEtPzXtzucV7i3follI2LKoAAEwhEqZSGCGHrNeQ/hvFVNd2UAT57qcBnh3t1URPixwCnCvVIKgvEqNCoqwuddM+Lb+FlFuuUDZnIfT5zmfK8RTr0W/t9v8F/xYgbfC+j60cVwai8Ma+gOSvsk2RN/9jynYwr/dpO9wRz6U3Y7hDicEZ+lJG/QSDlwd4kgb/wr7CWZYb4nshM4mpz/EyTHTQgAwBdcHfvD0eHfujLU1dCQl0PRYVdXxmBII/jD4/FxVVMWRpgOV/ptV1XmQL6pEUcgBe+IKcqcKF7SOJAvgzHLKbpOnqPz//us8++g9P23bxRlADM716jrMPMwjjFfu75PESzJpgcVGalC2T0TfftzCj0jpelgfXksviN9ZIKVo5xO+HWWI8gIqhcfEnIZVqLaFB+rBGHwJf72lp2XkdE8Dcg7kkwAX9MGq0gIFJWYE/8BgqyswR0JOU4RT0YGoKdhIz8dI2oJMSlkTqzhFSxEyJKCTEr+O/BR9PtPYZyqPbFydmVEkj1beBEgRbXm/iDIGcnLHwZXfGREu+MkhMEFOTJ3Cw2BXFCRN1JiKMK9aqGJyPV0pEwzUCp2EpA9gszQk93S8KSO7EsIwLRy9hCXRw15K6Uf78mxsbFxYsellh/jBPm+ZPoV+Z6+fuwQX3QkYeyYg2wacpCd/pCXpoIxj1WCjPRBeLSSh/sg2lWCFLORdkteleIbOc3ItnwjY/qb2UY2lRVmIYtob28QhMHHWbJaW6tk6cuMcru1Xa8qa3JBnNg0ET+2t7fq9DE24D+PDyZMyOPKVn1deSaLrUX3rFnW7O3nj7Sn2GnvUsecks2vHlQVBJ9Jt1bSfF876WpPZHXFIEbqz5fvaduLxK1ClJL68tNZbRPDjJXZFkae1lwNQWUrJllopHY/YUMGhgIIZNUmE7Z9LNrFkFi311voe20uad+LyoI143CJyHr1C8pavJG4H4Wgzvg7Kuuvc+j7fPLm2gm3ijcV368s1+ZvGLbw4HvT7eXnRZiSW7XFOVMDg2ZO4VrcjDfwfkoefZfSJ4B4QCzGbUKQkiefz6a2lfln0zEiyhF9H81oeeJ1YyooRz8l5lZMNFbFni8TQd7n3PQ2XPSVg89CRMha/t7Natz9tvKqXzLjaORJ0FimN+7+lPzN19wbb/3+LevrdQrrdbyfsr5fwDCr1wlx3KzfpQww+1c8Ql/edOY9WjN5KNQJkcsAAAAASUVORK5CYII=";
-redfavicon = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkBAMAAACCzIhnAAAAFVBMVEVvcm0CAQAtAABJAAB0AACrAADuAABCDS95AAAAAXRSTlMAQObYZgAAAAFiS0dEAIgFHUgAAAAJcEhZcwAACxMAAAsTAQCanBgAAAAHdElNRQfjBAQAIx5iQLgZAAAAHWlUWHRDb21tZW50AAAAAABDcmVhdGVkIHdpdGggR0lNUGQuZQcAAANmSURBVFjDvZjLeqMgFIDrPEFObLoebZ29bXRPvOwbgX2TwPs/wgBq5KqymOH72q9Vfs4VOMeXl381Eogn4BBNxCIQjUghAPEExKoVh0zEIZqIQCAagVgkgUgEjHGIErDDx870dQRCI2b5VVMA/geia3b8OmY7Habev3ec84oz/LnTYakEOK/lL1xuIfLlK1GEkCIHQ9umvHKuI5yjVUSa3dsIL1cQIeRIKwdpszAiVut5ayOsfgTNFy9OnN+phYgH3wHml1BLLvpnmjqjg/gRqv32W6JmPzXTpN381ogYqik3ahCPevKaV0g9mtsbyG00yCdGOpjbQzzB41+ZRwzAm0Pcn6kgnebRyxXyvSDM1UxLrmWgk/a3I2bysDky7dnNRrx6Meh5WLNERd4aD2OZzEJEHAtr/jv9SbX/r3Y0RRyvlektqDWH8aF6mIgyBQwGQZ0VGmEbk8j8At1agVRTBsmYVirPTOQkrT0ZyNeyBBtVPTjZcodCR3IwHfJjGDPpNGjmoHkzaD43kTECGoPA0HMMpi+QC4PcFNKDmSw6XGebkelAbrksAX1j9DPiJLaBaGpfjmR8nzrbJ4QwlPYKOa0hlqVIngIIChvRt4ztnFIwaEmXZ6JpSGZmJGdlSj1S7nDUU9+KWvlaulLuhmKVvYdL95mFvOd5bijCMlNKIyZkq1LkknRdSs13DBMp9iBXDUn2IoGECY/vaISiQPKHCYb8Wyw8GDO3GOwgiHH2+c59m6DYOmE2Ysk4JYOFvG1IIZSY1+WWl5mwhCDrTFYHGQ4hnUTsk1/af69CyFAR0lo3n7SffYT9izp8dW6xE/sKOpoSknf2xSfifwkRTBBkSDPnRg5GhknFML445YW3VJhCIgZufdVFGrJdMLhr3VIpce8GTUjXNp6CDPwJQIkUgtvSW4/N2Wx6blBE46thk/mYefSGkKu0XRp/8JWj44X5YxqPi67Fjb9QnsWcjQRm5EMIKQMl/GjNs7QmY6aQS9s2oQo+UcWiVsCrXYKb80qfAPI419sEqkLy8bneVvZaM0KJTK4232h5lhyoZAZPIYHV5jhdbJHpiJtsvQ1PloaPF2NuZVuNu+pCz1IQraRenzsa97GLPBPOqhnY/Jwyt6v5zo8DvuY69iPH7m8pSfz3mlG/0Ju/8OtgDQLfRj4AAAAASUVORK5CYII=";
+redfavicon = " data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkBAMAAACCzIhnAAAAGFBMVEUAAQAuAQBjAACWAACtAAFZVQCjnwD+/wGUfd4cAAAAAWJLR0QAiAUdSAAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB+MEBRYyO9qK9+kAAAAdaVRYdENvbW1lbnQAAAAAAENyZWF0ZWQgd2l0aCBHSU1QZC5lBwAAA+tJREFUWMOVWEt2qzAMFbQhUz5ZgCEsoAlZQAEvgMlrp5mknWbSdPvPf8sf3KBJcsDX15J1bQkAZvtfZvct/4D/+03+u3nP/p76BltJfmAzybKZ5LqZRC1rA8lj2UqiEcXTJBohIZZvncQgxEP5DJIkFiEg8i2kSHZg7dO8hRQJuBD1FlLpiu3bvIWQ5Ov2D0Kz4yA5tbWdHQep9SMr7Dh4jgT2dhw8RwKfq3m2M3tXZQ7kuprMcruz7kJpQ+eu9KMWkhSLBnAI9UBREo7IB0o1hNKBpEl4TuUXiiF0JkkSbj11IXQuEyTcj77xIVT5s0bS0zZgOUwpkpzS0fOFjj0lCRI2fH5VQ1XgOO0s9RJon9mBD6mpa5xtlMeFr33muxjyfnEQk5in5Brztc9Mrn7qHcibmOHEnfG1v0CmprcsM/t71puz87VfALxQ38bcktlk1pq+o3234yxksimgtb9AHiAoQcQEPO0/VIRdK9Gz0df+j9hGz2a81tnX/tXEC3uPpxEJjfOMhdjzZcou73gaUrp5xl05Na7rcCBollMzigQwJNyVGRoPUtqAnWruzCdK5jvLr9ndGQKNDeJYizzbI8Vc+dafna0hUNkpJpkABVLMAq8i9xoMKcENyDtLs190o/XUwxAtBpwzluShNxJhSJCnzNlvQ8ICpiNjMAzy6m2tPBq1kDOb5L2B+KmND7Q7ihVRI0mYdSqZlfadLD/KnyyQj6N9BJlJ1gtIHoUY7ePgSAwJhf3maN9Jr7lkKUzcZ+qYQdp3X3PMCsRq31PxVOZlCBkd7fuvpxKiLFb7kFVV5RzGZ4+5ZQP48WeP4yYtfM2ShkRMQu7qPN4AkVlzjZzHEcOyfA4yC4hSzHMQVjUU6IDJnyBhkL3R/j1M9AjJUKqqDBwhpxCDrsr2+LhILWs4q4tMH+aHv0lO4Gg/OE1CEl1mmXs//5PkrCDm3hchO68hOobodFVm7v2LuBFWrG2GrgPv3mf+T/n6skjXmStZ3/vwMleXRIAzVchZ7TNn2j4Rra7N/Hv/J6EyHi29LnTvP9Z3RpAoiFPzL6uZKUm6sL6Mlj0I0YZF7APiMlPLkvHyitjFZLMT66FdIxHgSKE4D2/HNZK7ShpdTNpNzBMkypva871KkQia6WBLa7nvKZKggBcBbut1kkJEoLNVuNqSvFz/qMAPg6NtRpwtwYvBvbHb8sxo33EPDf73lkx3FLUkaf0Wyev3+dKyo4GcDQI36pF+H2oetKHmJGEfFuv3BWjgkK4Km71ovw/RZv830e8XS6QNdz45QPjl4oZAu8h3DYh8uXhcNeDjGvmuAaufRz6+vuMfT/4DHXXmNA4ydaEAAAAASUVORK5CYII=";
 favicon = document.querySelector("link[rel*='icon']") || document.createElement('link');
 favicon.type = 'image/x-icon';
 favicon.rel = 'shortcut icon';
 favicon.href = whitefavicon;
 document.getElementsByTagName('head')[0].appendChild(favicon);
+if (window.Notification && Notification.permission !== "denied") {
+Notification.requestPermission(function(status) {
+ntf = 1;
+audio = new Audio('https://guillearriaza.github.io/guillechrono/bottle.ogg');
+});
+}
 
+
+function showNotification(label){
+var notification = new Notification(
+'Alert From Chronometer!', {
+body: label,
+icon: redfavicon,
+});
+} //function showNotification
 
 function obtainDate(counter){
 d = new Date();
@@ -151,6 +167,7 @@ document.getElementById("tolabel_" + index).value = item;
 waittimes.forEach(function(item,index) {
 document.getElementById("waittime_" + index).value = item;
 });
+document.getElementById("counter_" + c).style.backgroundColor = "rgb(221, 221, 221)";
 } //function addCounter
 
 
@@ -162,11 +179,20 @@ active_chrono[counter] = 0;
 
 
 function updateChrono() {
-redchronos = 0;
+redchronosexist = 0;
+changedred = [];
 active_chrono.forEach(updateIndividualChrono);
-if (redchronos == 1) {
+if (redchronosexist == 1) {
 favicon.href = redfavicon;
 document.getElementsByTagName('head')[0].appendChild(favicon);
+if (changedred !== []) {
+changedred.forEach(function(item,index) {
+if (ntf == 1) {
+showNotification(document.getElementById("tolabel_" + item).value);
+audio.play();
+}
+});
+}
 }
 else {
 favicon.href = whitefavicon;
@@ -184,11 +210,16 @@ d.setMilliseconds(timediff);
 d = d.toISOString().substr(11,8);
 document.getElementById("chrono_" + active_chrono[index]).innerHTML = d;
 if (new Date("1/1/2001 " + d) > new Date("1/1/2001 00:" + document.getElementById("waittime_" + index).value + ":00")) {
-redchronos = 1;
-document.getElementById("counter_" + index).style.backgroundColor = "#FF6666";
+redchronosexist = 1;
+if (document.getElementById("counter_" + index).style.backgroundColor == "rgb(221, 221, 221)") {
+document.getElementById("counter_" + index).style.backgroundColor = "rgb(255, 102, 102)";
+changedred.push(index);
+}
 }
 else {
-document.getElementById("counter_" + index).style.backgroundColor = "#DDDDDD";
+if (document.getElementById("counter_" + index).style.backgroundColor == "rgb(255, 102, 102)") {
+document.getElementById("counter_" + index).style.backgroundColor = "rgb(221, 221, 221)";
+}
 }
 }
 } //function updateIndividualChrono
