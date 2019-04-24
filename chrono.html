@@ -4,7 +4,7 @@
 <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
 <meta http-equiv="dcterms.rightsHolder" content="Guille Arriaza"/>
 <meta http-equiv="dcterms.rights" content="This is free and unencumbered software released into the public domain. Anyone is free to copy, modify, publish, use, compile, sell, or distribute this software, either in source code form or as a compiled binary, for any purpose, commercial or non-commercial, and by any means. In jurisdictions that recognize copyright laws, the author or authors of this software dedicate any and all copyright interest in the software to the public domain. We make this dedication for the benefit of the public at large and to the detriment of our heirs and successors. We intend this dedication to be an overt act of relinquishment in perpetuity of all present and future rights to this software under copyright law. THE SOFTWARE IS PROVIDED [[[AS IS]]], WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. For more information, please refer to <http://unlicense.org/>"/>
-<meta http-equiv="version" content="0.5-1904872004"/>
+<meta http-equiv="version" content="0.6-19004231929"/>
 <title>Chronometer</title>
 <style type="text/css">
 body {
@@ -15,6 +15,24 @@ border: 0px;
 background-color: #FFFFFF;
 color: #000000;
 font-family: Helvetica, Myriad, Arial, Sans-serif
+}
+#counters {
+position: fixed;
+left: 0px;
+right: 25px;
+height: 100%;
+display: inline-block;
+overflow: auto;
+}
+#right {
+position: fixed;
+padding: 0px;
+margin: 0px;
+border: 0px;
+right: 0px;
+width: 25px;
+height: 100%;
+display: inline-block;
 }
 .counter {
 position: relative;
@@ -57,7 +75,18 @@ background-color: #FFFFFF;
 color: #000000;
 padding: 3px;
 border: 0px;
-font-size: 10px;
+font-size: 8px;
+}
+#defaulttime {
+position: absolute;
+top: 25px;
+right: 0px;
+width: 25px;
+height: 25px;
+text-align: center;
+margin: 0px;
+border-radius: 0px;
+font-size: 8px;
 }
 .tolabel {
 position: absolute;
@@ -81,9 +110,14 @@ font-style: bold;
 font-weight: bold;
 }
 #addcounter {
-position: fixed;
+position: absolute;
 top: 0px;
-right: 0px
+right: 0px;
+width: 25px;
+height: 25px;
+text-align: center;
+margin: 0px;
+border-radius: 0px;
 }
 .markbutton {
 position: absolute;
@@ -106,7 +140,10 @@ background-color: #600;
 <body>
 <div id="counters">
 </div>
-<button id="addcounter" onClick="addCounter()">+</button>
+<div id="right">
+<button id="addcounter" onClick="addCounter()">+</button><br />
+<input id="defaulttime" type="number" value="10" min="1" max="60" step="1" />
+</div>
 <script type="text/javascript">
 c = 0;
 c2 = 0;
@@ -160,7 +197,7 @@ d = new Date();
 last_marks[c] = d;
 active_chrono[c] = c;
 d = d.toLocaleTimeString().substr(0,8);
-document.getElementById("counters").innerHTML += "<div class=\"counter\" id=\"counter_" + c + "\"><button class=\"xCounter\" onClick=\"closeCouter(" + c + ")\">x</button><input class=\"waittime\" id=\"waittime_" + c + "\" type=\"number\" value=\"10\" min=\"1\" max=\"60\" step=\"1\"/><input class=\"tolabel\" id=\"tolabel_" + c + "\" type=\"text\" value=\"\" /><div class=\"markersWrapper\"><div class=\"markers\" id=\"markers_" + c + "\">" + d + "</div></div><div class=\"lastmark\" id=\"lastmark_" + c + "\">" + d + "</div><div class=\"chrono\" id=\"chrono_" + c + "\">00:00:00</div><button class=\"markbutton\" onClick=\"obtainDate(" + c + ")\">↻</button></div>";
+document.getElementById("counters").innerHTML += "<div class=\"counter\" id=\"counter_" + c + "\"><button class=\"xCounter\" onClick=\"closeCouter(" + c + ")\">x</button><input class=\"waittime\" id=\"waittime_" + c + "\" type=\"number\" value=\"" + document.getElementById("defaulttime").value + "\" min=\"1\" max=\"60\" step=\"1\"/><input class=\"tolabel\" id=\"tolabel_" + c + "\" type=\"text\" value=\"\" /><div class=\"markersWrapper\"><div class=\"markers\" id=\"markers_" + c + "\">" + d + "</div></div><div class=\"lastmark\" id=\"lastmark_" + c + "\">" + d + "</div><div class=\"chrono\" id=\"chrono_" + c + "\">00:00:00</div><button class=\"markbutton\" onClick=\"obtainDate(" + c + ")\">↻</button></div>";
 titles.forEach(function(item,index) {
 document.getElementById("tolabel_" + index).value = item;
 });
