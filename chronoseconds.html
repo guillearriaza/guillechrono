@@ -142,7 +142,7 @@ background-color: #600;
 </div>
 <div id="right">
 <button id="addcounter" onClick="addCounter()">+</button><br />
-<input id="defaulttime" type="number" value="10" min="1" max="60" step="1" />
+<input id="defaulttime" type="number" value="20" min="1" max="60" step="1" />
 </div>
 <script type="text/javascript">
 c = 0;
@@ -197,7 +197,7 @@ d = new Date();
 last_marks[c] = d;
 active_chrono[c] = c;
 d = d.toLocaleTimeString().substr(0,8);
-document.getElementById("counters").innerHTML += "<div class=\"counter\" id=\"counter_" + c + "\"><button class=\"xCounter\" onClick=\"closeCouter(" + c + ")\">x</button><input class=\"waittime\" id=\"waittime_" + c + "\" type=\"number\" value=\"" + document.getElementById("defaulttime").value + "\" min=\"1\" max=\"60\" step=\"1\"/><input class=\"tolabel\" id=\"tolabel_" + c + "\" type=\"text\" value=\"\" /><div class=\"markersWrapper\"><div class=\"markers\" id=\"markers_" + c + "\">" + d + "</div></div><div class=\"lastmark\" id=\"lastmark_" + c + "\">" + d + "</div><div class=\"chrono\" id=\"chrono_" + c + "\">00:00:00</div><button class=\"markbutton\" onClick=\"obtainDate(" + c + ")\">↻</button></div>";
+document.getElementById("counters").innerHTML += "<div class=\"counter\" id=\"counter_" + c + "\"><button class=\"xCounter\" onClick=\"closeCouter(" + c + ")\">x</button><input class=\"waittime\" id=\"waittime_" + c + "\" type=\"number\" value=\"" + document.getElementById("defaulttime").value + "\" step=\"10\"/><input class=\"tolabel\" id=\"tolabel_" + c + "\" type=\"text\" value=\"\" /><div class=\"markersWrapper\"><div class=\"markers\" id=\"markers_" + c + "\">" + d + "</div></div><div class=\"lastmark\" id=\"lastmark_" + c + "\">" + d + "</div><div class=\"chrono\" id=\"chrono_" + c + "\">00:00:00</div><button class=\"markbutton\" onClick=\"obtainDate(" + c + ")\">↻</button></div>";
 titles.forEach(function(item,index) {
 document.getElementById("tolabel_" + index).value = item;
 });
@@ -246,7 +246,7 @@ timediff = Math.abs(nd-last_marks[index]);
 d.setMilliseconds(timediff);
 d = d.toISOString().substr(11,8);
 document.getElementById("chrono_" + active_chrono[index]).innerHTML = d;
-if (new Date("1/1/2001 " + d) > new Date("1/1/2001 00:" + document.getElementById("waittime_" + index).value + ":00")) {
+if (new Date("1/1/2001 " + d) > new Date("1/1/2001 00:00:" + document.getElementById("waittime_" + index).value)) {
 redchronosexist = 1;
 if (document.getElementById("counter_" + index).style.backgroundColor == "rgb(221, 221, 221)") {
 document.getElementById("counter_" + index).style.backgroundColor = "rgb(255, 102, 102)";
